@@ -1,0 +1,42 @@
+version: '3.8'
+services:
+  api:
+    container_name: culinary-canvas-api
+    restart: unless-stopped
+    build: .
+    command: pnpm run dev
+    env_file: ./.env
+    ports:
+      - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
+    depends_on:
+      - db
+      - cache
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./src:/server/src
+
+  db:
+    image: postgres
+    container_name: postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=$POSTGRESDB_USER
+      - POSTGRES_PASSWORD=$POSTGRESDB_ROOT_PASSWORD
+      - POSTGRES_DB=$POSTGRESDB_DATABASE
+    ports:
+      - $POSTGRESDB_LOCAL_PORT:$POSTGRESDB_DOCKER_PORT
+    volumes:
+      - culinary-canvas:/var/lib/postgresql/data
+    
+
+  cache:
+    image: redis
+    container_name: redis
+    restart: unless-stopped
+    ports:
+      - $REDIS_LOCAL_PORT:$REDIS_DOCKER_PORT
+
+
+volumes: 
+ culinary-canvas:

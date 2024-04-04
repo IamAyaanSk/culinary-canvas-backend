@@ -1,0 +1,8 @@
+node_modules
+.prettierrc
+.eslintrc.json
+.env.example
+.gitignore
+Dockerfile
+random.txt
+.idea
